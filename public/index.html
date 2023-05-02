@@ -1,14 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Physics Simulation</title>
+  <title>Physics Simulation with Style Switching</title>
+    <link id="style-sheet" rel="stylesheet" type="text/css" href="style1.css">
     <style>
-      canvas {
-        border: 1px solid black;
+      /* Style for the buttons */
+      .style-switcher {
+        position: fixed;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+      }
+      .style-switcher button {
+        display: block;
+        margin-bottom: 10px;
+        padding: 5px;
+        font-size: 16px;
+        background-color: #eee;
+        border: none;
+        cursor: pointer;
+      }
+      .style-switcher button:hover {
+        background-color: #ddd;
       }
     </style>
   </head>
+
+  
   <body>
+    <!-- Buttons for switching between stylesheets -->
+    <div class="style-switcher">
+      <button onclick="setStylesheet('style1.css')">Style 1</button>
+      <button onclick="setStylesheet('style2.css')">Style 2</button>
+    </div>
+
     <canvas id="canvas" width="600" height="400"></canvas>
     <script>
       var canvas = document.getElementById("canvas");
@@ -34,8 +58,8 @@
 
       // Add event listener to track cursor movement
       canvas.addEventListener("mousemove", function(event) {
-        cursorSquare.vx = (event.clientX - cursorSquare.x) / 50;
-        cursorSquare.vy = (event.clientY - cursorSquare.y) / 50;
+        cursorSquare.vx = (event.clientX - cursorSquare.x) / 25;
+        cursorSquare.vy = (event.clientY - cursorSquare.y) / 25;
       });
 
       // Define a function to update the position of the squares
@@ -83,12 +107,25 @@
 
   // Define a function to draw the squares on the canvas
   function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = "blue";
-    ctx.fillRect(freeSquare.x, freeSquare.y, freeSquare.size, freeSquare.size);
-    ctx.fillStyle = "red";
-    ctx.fillRect(cursorSquare.x, cursorSquare.y, cursorSquare.size, cursorSquare.size);
-  }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = "white";  // add black border for the cursor square
+  ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "blue";
+  ctx.fillRect(freeSquare.x, freeSquare.y, freeSquare.size, freeSquare.size);
+  ctx.strokeStyle = "white";  // add white border for the free square
+  ctx.strokeRect(freeSquare.x, freeSquare.y, freeSquare.size, freeSquare.size);
+  ctx.fillStyle = "red";
+  ctx.fillRect(cursorSquare.x, cursorSquare.y, cursorSquare.size, cursorSquare.size);
+  ctx.strokeStyle = "white";  // add black border for the cursor square
+  ctx.strokeRect(cursorSquare.x, cursorSquare.y, cursorSquare.size, cursorSquare.size);
+}
+
+  // Function to switch the stylesheet
+  function setStylesheet(sheetName) {
+        var stylesheet = document.getElementById("style-sheet");
+        stylesheet.setAttribute("href", sheetName);
+      }
 
   // Define the main loop
   function loop() {
